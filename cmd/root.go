@@ -10,7 +10,7 @@ import (
 
 // Root Command
 var rootCmd = &cobra.Command{
-	Use:   "aoc",
+	Use:   "main.go",
 	Short: "Advent of Code 2023",
 }
 
@@ -19,7 +19,7 @@ func init() {
 	rootCmd.AddCommand(demo.DemoCmd)
 
 	// Load event day commands
-	rootCmd.AddCommand(day1Cmd)
+	rootCmd.AddCommand(dayCmd)
 }
 
 func Execute() {
