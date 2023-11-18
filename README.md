@@ -1,2 +1,2 @@
-# adventofcode2023
+# Advent of Code 2023
 Solves for the Advent of Code 2023 (https://adventofcode.com/2023)
