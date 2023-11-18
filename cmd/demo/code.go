@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -77,8 +79,11 @@ var testCodeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// readFromFile()
 		// unmarshalJson()
-		unmarshalJsonFile()
+		// unmarshalJsonFile()
 		// marshalJson()
+		// splitString()
+		splitString2()
+		// stringToInt()
 	},
 }
 
@@ -149,6 +154,94 @@ func readFromFile() {
 		if t != "" {
 			fmt.Printf("line %v: %s\n", lineNum, t)
 			lineNum++
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func splitString() {
+	file, err := os.Open("cmd/demo/file2.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	lineNum := 1
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		t := scanner.Text()
+		data := strings.Split(t, " ")
+		if t != "" {
+			if len(data) < 2 {
+				fmt.Printf("line %v: %s\n", lineNum, data[0])
+			} else {
+				fmt.Printf("line %v: %s (%s)\n", lineNum, data[0], data[1])
+			}
+			lineNum++
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func splitString2() {
+	file, err := os.Open("cmd/demo/file2.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		t := scanner.Text()
+		data := strings.Split(t, " ")
+		if t != "" {
+			if data[0] == "addx" {
+				if len(data) == 2 {
+					fmt.Println(data[1])
+				}
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func stringToInt() {
+	// b, err := strconv.ParseBool("true")
+	// f, err := strconv.ParseFloat("3.1415", 64)
+	// i, err := strconv.ParseInt("-42", 10, 64)
+	// u, err := strconv.ParseUint("42", 10, 64)
+
+	file, err := os.Open("cmd/demo/file2.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		t := scanner.Text()
+		data := strings.Split(t, " ")
+		if t != "" {
+			if len(data) == 2 {
+				// i, err := strconv.Atoi(data[1])
+				i, err := strconv.ParseInt(data[1], 10, 64)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if i < 0 {
+					fmt.Println(i)
+				}
+			}
 		}
 	}
 
