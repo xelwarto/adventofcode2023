@@ -82,7 +82,7 @@ var testCodeCmd = &cobra.Command{
 		// unmarshalJsonFile()
 		// marshalJson()
 		// splitString()
-		splitString2()
+		// splitString2()
 		// stringToInt()
 	},
 }
