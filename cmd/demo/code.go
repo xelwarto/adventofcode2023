@@ -102,7 +102,7 @@ func unmarshalJson() {
 }
 
 func unmarshalJsonFile() {
-	b, err := os.ReadFile("cmd/demo/file1.json")
+	b, err := os.ReadFile("inputs/demo/file1.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -141,7 +141,7 @@ func marshalJson() {
 }
 
 func readFromFile() {
-	file, err := os.Open("cmd/demo/file1.txt")
+	file, err := os.Open("inputs/demo/file1.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -163,7 +163,7 @@ func readFromFile() {
 }
 
 func splitString() {
-	file, err := os.Open("cmd/demo/file2.txt")
+	file, err := os.Open("inputs/demo/file2.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -190,7 +190,7 @@ func splitString() {
 }
 
 func splitString2() {
-	file, err := os.Open("cmd/demo/file2.txt")
+	file, err := os.Open("inputs/demo/file2.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -220,7 +220,7 @@ func stringToInt() {
 	// i, err := strconv.ParseInt("-42", 10, 64)
 	// u, err := strconv.ParseUint("42", 10, 64)
 
-	file, err := os.Open("cmd/demo/file2.txt")
+	file, err := os.Open("inputs/demo/file2.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
