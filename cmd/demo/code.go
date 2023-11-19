@@ -2,6 +2,7 @@ package demo
 
 import (
 	"bufio"
+	"code/util"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -83,6 +84,7 @@ var testCodeCmd = &cobra.Command{
 		// marshalJson()
 		// splitString()
 		// splitString2()
+		// splitString3()
 		// stringToInt()
 	},
 }
@@ -141,40 +143,30 @@ func marshalJson() {
 }
 
 func readFromFile() {
-	file, err := os.Open("inputs/demo/file1.txt")
+	s, err := util.File2Array("inputs/demo/file1.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
 
 	lineNum := 1
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		t := scanner.Text()
-		if t != "" {
-			fmt.Printf("line %v: %s\n", lineNum, t)
-			lineNum++
+	for p, x := range s {
+		if x != "" {
+			fmt.Printf("line %v: %s (%v)\n", lineNum, x, p)
 		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		lineNum++
 	}
 }
 
 func splitString() {
-	file, err := os.Open("inputs/demo/file2.txt")
+	s, err := util.File2Array("inputs/demo/file2.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
 
 	lineNum := 1
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		t := scanner.Text()
-		data := strings.Split(t, " ")
-		if t != "" {
+	for _, x := range s {
+		data := strings.Split(x, " ")
+		if x != "" {
 			if len(data) < 2 {
 				fmt.Printf("line %v: %s\n", lineNum, data[0])
 			} else {
@@ -182,10 +174,6 @@ func splitString() {
 			}
 			lineNum++
 		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
 	}
 }
 
@@ -212,6 +200,21 @@ func splitString2() {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func splitString3() {
+	s, err := util.File2Array("inputs/demo/file1.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, x := range s {
+		if x != "" {
+			data := strings.Split(x, "")
+			fmt.Printf("%s (%v) %s\n", x, len(data), data[0])
+		}
+	}
+
 }
 
 func stringToInt() {
