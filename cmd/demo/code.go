@@ -78,14 +78,15 @@ var testCodeCmd = &cobra.Command{
 	Use:   "test-code",
 	Short: "Test Code",
 	Run: func(cmd *cobra.Command, args []string) {
-		// readFromFile()
-		// unmarshalJson()
-		// unmarshalJsonFile()
-		// marshalJson()
-		// splitString()
-		// splitString2()
-		// splitString3()
-		// stringToInt()
+		readFromFile()
+		unmarshalJson()
+		unmarshalJsonFile()
+		marshalJson()
+		splitString()
+		splitString2()
+		splitString3()
+		stringToInt()
+		stringToInt2()
 	},
 }
 
@@ -250,5 +251,30 @@ func stringToInt() {
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func stringToInt2() {
+	s, err := util.File2Array("inputs/demo/file2.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, x := range s {
+		data := strings.Split(x, " ")
+		if x != "" {
+			if len(data) == 2 {
+				i, err := strconv.ParseInt(data[1], 10, 64)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				fmt.Printf("100-(%v) = %v\n", i, 100-(i))
+				fmt.Printf("%v-100 = %v\n", i, i-100)
+				fmt.Printf("%v+100 = %v\n", i, i+100)
+				fmt.Printf("100+(%v) = %v\n", i, 100+(i))
+				fmt.Println()
+			}
+		}
 	}
 }
