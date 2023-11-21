@@ -1,13 +1,13 @@
 package days
 
 func init() {
-	d := addDay(1)
+	d := addDay(2)
 
 	d.Part1 = func() (string, error) {
-		return "1", nil
+		return "", nil
 	}
 
 	d.Part2 = func() (string, error) {
-		return "2", nil
+		return "", nil
 	}
 }

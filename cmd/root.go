@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"code/cmd/days"
 	"code/cmd/demo"
 	"fmt"
 	"os"
@@ -19,7 +20,7 @@ func init() {
 	rootCmd.AddCommand(demo.DemoCmd)
 
 	// Load event day commands
-	rootCmd.AddCommand(dayCmd)
+	rootCmd.AddCommand(days.DayCmd)
 }
 
 func Execute() {
