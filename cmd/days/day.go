@@ -17,7 +17,7 @@ type Day interface {
 var days []Day
 
 var DayCmd = &cobra.Command{
-	Use:   "day [num]",
+	Use:   "day [day]",
 	Short: "Advent of Code 2023",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 && len(days) > 0 {

@@ -3,7 +3,7 @@ Solves for the Advent of Code 2023 (https://adventofcode.com/2023)
 
 ```
 go mod tidy
-go run main.go day [DAY]
+go run main.go day [day]
 
 # Example:
 go run main.go day 1
