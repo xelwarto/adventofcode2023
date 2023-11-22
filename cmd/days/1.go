@@ -1,13 +1,21 @@
 package days
 
+type Day1 int
+
+var day1 = Day1(1)
+
+func (d Day1) Part1() (string, error) {
+	return "Day1", nil
+}
+
+func (d Day1) Part2() (string, error) {
+	return "Day1", nil
+}
+
+func (d Day1) DayInt() int {
+	return int(d)
+}
+
 func init() {
-	d := addDay(1)
-
-	d.Part1 = func() (string, error) {
-		return "1", nil
-	}
-
-	d.Part2 = func() (string, error) {
-		return "2", nil
-	}
+	NewDay(&day1)
 }

@@ -8,45 +8,53 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type Day interface {
+	Part1() (string, error)
+	Part2() (string, error)
+	DayInt() int
+}
+
+var days []Day
+
 var DayCmd = &cobra.Command{
-	Use:   "day",
+	Use:   "day [num]",
 	Short: "Advent of Code 2023",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 && len(days) > 0 {
+			i, err := strconv.Atoi(args[0])
+			if err != nil {
+				log.Fatalf("Error: %v", err)
+			}
+
+			found := false
+			for _, d := range days {
+				if i == d.DayInt() {
+					found = true
+					fmt.Printf("Advent of Code 2023 - Day %v\n\n", d.DayInt())
+
+					p1, err := d.Part1()
+					if err != nil {
+						log.Fatalf("Error: %v", err)
+					}
+					fmt.Printf("Part1 Answer: %s\n", p1)
+
+					p2, err := d.Part2()
+					if err != nil {
+						log.Fatalf("Error: %v", err)
+					}
+					fmt.Printf("Part2 Answer: %s\n", p2)
+				}
+			}
+
+			if !found {
+				log.Fatalf("Error: requested day not found")
+			}
+		} else {
+			cmd.Help()
+		}
+	},
 }
 
-type Day struct {
-	Command *cobra.Command
-	Part1   func() (string, error)
-	Part2   func() (string, error)
-}
-
-func addDay(i int) *Day {
-	s := strconv.Itoa(i)
-	d := Day{}
-	d.Command = &cobra.Command{
-		Use:   s,
-		Short: fmt.Sprintf("Advent of Code 2023 - Day %s", s),
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("Advent of Code 2023 - Day %s\n\n", s)
-
-			p1, err := d.Part1()
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Printf("Part 1 Answer: %v\n", p1)
-
-			p2, err := d.Part2()
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Printf("Part 2 Answer: %v\n", p2)
-		},
-	}
-	d.Part1 = func() (string, error) {
-		return "", nil
-	}
-	d.Part2 = func() (string, error) {
-		return "", nil
-	}
-	DayCmd.AddCommand(d.Command)
-	return &d
+func NewDay(d Day) {
+	days = append(days, d)
 }
