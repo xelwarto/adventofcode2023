@@ -15,13 +15,14 @@ func (d Day3) Part1() (string, error) {
 		return "", err
 	}
 
+	total := 0
 	for _, x := range s {
 		if x != "" {
 			fmt.Println(x)
 		}
 	}
 
-	return "Day3", nil
+	return fmt.Sprintf("%v", total), nil
 }
 
 func (d Day3) Part2() (string, error) {
@@ -30,13 +31,14 @@ func (d Day3) Part2() (string, error) {
 		return "", err
 	}
 
+	total := 0
 	for _, x := range s {
 		if x != "" {
 			fmt.Println(x)
 		}
 	}
 
-	return "Day3", nil
+	return fmt.Sprintf("%v", total), nil
 }
 
 func (d Day3) DayInt() int {
