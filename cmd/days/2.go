@@ -3,6 +3,8 @@ package days
 import (
 	"code/util"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 type Day2 int
@@ -15,13 +17,52 @@ func (d Day2) Part1() (string, error) {
 		return "", err
 	}
 
+	total := 0
+	// only 12 red cubes, 13 green cubes, and 14 blue cubes
 	for _, x := range s {
 		if x != "" {
-			fmt.Println(x)
+			f := true
+			data := strings.Split(x, ": ")
+			gData := strings.Split(data[0], " ")
+
+			id, err := strconv.Atoi(gData[1])
+			if err != nil {
+				return "", err
+			}
+
+			dData := strings.Split(data[1], ", ")
+			for _, d := range dData {
+				r := strings.Split(d, " ")
+				i, err := strconv.Atoi(r[0])
+				if err != nil {
+					return "", err
+				}
+
+				if r[1] == "red" {
+					if i > 12 {
+						f = false
+					}
+				}
+
+				if r[1] == "blue" {
+					if i > 14 {
+						f = false
+					}
+				}
+
+				if r[1] == "green" {
+					if i > 13 {
+						f = false
+					}
+				}
+			}
+			if f {
+				total = total + id
+			}
 		}
 	}
 
-	return "Day2", nil
+	return fmt.Sprintf("%v", total), nil
 }
 
 func (d Day2) Part2() (string, error) {
@@ -30,13 +71,48 @@ func (d Day2) Part2() (string, error) {
 		return "", err
 	}
 
+	total := 0
+	// only 12 red cubes, 13 green cubes, and 14 blue cubes
 	for _, x := range s {
 		if x != "" {
-			fmt.Println(x)
+			red := 0
+			green := 0
+			blue := 0
+
+			data := strings.Split(x, ": ")
+			dData := strings.Split(data[1], ", ")
+			for _, d := range dData {
+				r := strings.Split(d, " ")
+				i, err := strconv.Atoi(r[0])
+				if err != nil {
+					return "", err
+				}
+
+				if r[1] == "red" {
+					if i > red {
+						red = i
+					}
+				}
+
+				if r[1] == "blue" {
+					if i > blue {
+						blue = i
+					}
+				}
+
+				if r[1] == "green" {
+					if i > green {
+						green = i
+					}
+				}
+			}
+
+			total = total + (red * green * blue)
+
 		}
 	}
 
-	return "Day2", nil
+	return fmt.Sprintf("%v", total), nil
 }
 
 func (d Day2) DayInt() int {
