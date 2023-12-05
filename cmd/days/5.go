@@ -127,7 +127,8 @@ func (d Day5) Part2() (string, error) {
 	s6, _ := util.File2Array("inputs/day5_6.txt")
 	s7, _ := util.File2Array("inputs/day5_7.txt")
 
-	for q := 0; q < 10000000000; q++ {
+	// for q := 0; q < 10000000000; q++ {
+	for q := 47000000; q < 10000000000; q++ {
 		i7 := makeMap2(s7, q)
 		i6 := makeMap2(s6, i7)
 		i5 := makeMap2(s5, i6)
@@ -138,15 +139,12 @@ func (d Day5) Part2() (string, error) {
 
 		for w := 0; w < len(seeds); w = w + 2 {
 			if i1 >= seeds[w] && i1 < (seeds[w]+seeds[w+1]) {
-				if total == 0 {
-					total = q
-				} else {
-					if q < total {
-						total = q
-					}
-				}
-				fmt.Println(total)
+				total = q
+				break
 			}
+		}
+		if total > 0 {
+			break
 		}
 	}
 
