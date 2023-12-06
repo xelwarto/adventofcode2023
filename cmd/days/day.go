@@ -17,10 +17,14 @@ type Day interface {
 var days []Day
 
 var DayCmd = &cobra.Command{
-	Use:   "day [day]",
+	Use:   "day [day] [all|p1|p2]",
 	Short: "Advent of Code 2023",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 && len(days) > 0 {
+			part := "all"
+			if len(args) > 1 {
+				part = args[1]
+			}
 			i, err := strconv.Atoi(args[0])
 			if err != nil {
 				log.Fatalf("Error: %v", err)
@@ -32,17 +36,21 @@ var DayCmd = &cobra.Command{
 					found = true
 					fmt.Printf("Advent of Code 2023 - Day %v\n\n", d.DayInt())
 
-					p1, err := d.Part1()
-					if err != nil {
-						log.Fatalf("Error: %v", err)
+					if part == "all" || part == "p1" {
+						p1, err := d.Part1()
+						if err != nil {
+							log.Fatalf("Error: %v", err)
+						}
+						fmt.Printf("Part1 Answer: %s\n", p1)
 					}
-					fmt.Printf("Part1 Answer: %s\n", p1)
 
-					p2, err := d.Part2()
-					if err != nil {
-						log.Fatalf("Error: %v", err)
+					if part == "all" || part == "p2" {
+						p2, err := d.Part2()
+						if err != nil {
+							log.Fatalf("Error: %v", err)
+						}
+						fmt.Printf("Part2 Answer: %s\n", p2)
 					}
-					fmt.Printf("Part2 Answer: %s\n", p2)
 				}
 			}
 
