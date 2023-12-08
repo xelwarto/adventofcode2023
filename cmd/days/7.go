@@ -12,11 +12,7 @@ type Day7 int
 
 var day7 = Day7(7)
 
-// var cards = []string{`2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `T`, `J`, `Q`, `K`, `A`}
-
-var cards = []string{`J`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `T`, `Q`, `K`, `A`}
-
-func cardToInt(s string) int {
+func cardToInt(s string, cards []string) int {
 	for x := 0; x < len(cards); x++ {
 		if s == cards[x] {
 			return x
@@ -25,7 +21,7 @@ func cardToInt(s string) int {
 	return -1
 }
 
-func orderHands(r []string, h string) []string {
+func orderHands(r []string, h string, cards []string) []string {
 	res := []string{}
 	data1 := strings.Split(h, " ")
 	hand := strings.Split(data1[0], "")
@@ -37,8 +33,8 @@ func orderHands(r []string, h string) []string {
 
 		if !f {
 			for q := 0; q < len(y); q++ {
-				i1 := cardToInt(hand[q])
-				i2 := cardToInt(y[q])
+				i1 := cardToInt(hand[q], cards)
+				i2 := cardToInt(y[q], cards)
 
 				if i1 == i2 {
 					continue
@@ -65,6 +61,7 @@ func orderHands(r []string, h string) []string {
 }
 
 func (d Day7) Part1() (string, error) {
+	var cards = []string{`2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `T`, `J`, `Q`, `K`, `A`}
 	s, err := util.File2Array("inputs/day7_part1.txt")
 	if err != nil {
 		return "", err
@@ -89,7 +86,7 @@ func (d Day7) Part1() (string, error) {
 			for q := 0; q < len(cards); q++ {
 				re := regexp.MustCompile(cards[q])
 				if len(re.FindAllString(data[0], -1)) == 5 {
-					r6 = orderHands(r6, x)
+					r6 = orderHands(r6, x, cards)
 					f = true
 					break
 				}
@@ -100,7 +97,7 @@ func (d Day7) Part1() (string, error) {
 				for q := 0; q < len(cards); q++ {
 					re := regexp.MustCompile(cards[q])
 					if len(re.FindAllString(data[0], -1)) == 4 {
-						r5 = orderHands(r5, x)
+						r5 = orderHands(r5, x, cards)
 						f = true
 						break
 					}
@@ -121,7 +118,7 @@ func (d Day7) Part1() (string, error) {
 					}
 				}
 				if c2 && c3 {
-					r4 = orderHands(r4, x)
+					r4 = orderHands(r4, x, cards)
 					f = true
 				}
 			}
@@ -131,7 +128,7 @@ func (d Day7) Part1() (string, error) {
 				for q := 0; q < len(cards); q++ {
 					re := regexp.MustCompile(cards[q])
 					if len(re.FindAllString(data[0], -1)) == 3 {
-						r3 = orderHands(r3, x)
+						r3 = orderHands(r3, x, cards)
 						f = true
 						break
 					}
@@ -148,7 +145,7 @@ func (d Day7) Part1() (string, error) {
 					}
 				}
 				if c == 2 {
-					r2 = orderHands(r2, x)
+					r2 = orderHands(r2, x, cards)
 					f = true
 				}
 			}
@@ -158,7 +155,7 @@ func (d Day7) Part1() (string, error) {
 				for q := 0; q < len(cards); q++ {
 					re := regexp.MustCompile(cards[q])
 					if len(re.FindAllString(data[0], -1)) == 2 {
-						r1 = orderHands(r1, x)
+						r1 = orderHands(r1, x, cards)
 						f = true
 						break
 					}
@@ -166,7 +163,7 @@ func (d Day7) Part1() (string, error) {
 			}
 
 			if !f {
-				r0 = orderHands(r0, x)
+				r0 = orderHands(r0, x, cards)
 			}
 		}
 	}
@@ -205,6 +202,7 @@ func (d Day7) Part1() (string, error) {
 
 // ##################################################################################
 func (d Day7) Part2() (string, error) {
+	var cards = []string{`J`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `T`, `Q`, `K`, `A`}
 	s, err := util.File2Array("inputs/day7_part2.txt")
 	if err != nil {
 		return "", err
@@ -233,7 +231,7 @@ func (d Day7) Part2() (string, error) {
 				exp := fmt.Sprintf("[%s*]", cards[q])
 				re := regexp.MustCompile(exp)
 				if len(re.FindAllString(hand, -1)) == 5 {
-					r6 = orderHands(r6, x)
+					r6 = orderHands(r6, x, cards)
 					f = true
 					break
 				}
@@ -245,7 +243,7 @@ func (d Day7) Part2() (string, error) {
 					exp := fmt.Sprintf("[%s*]", cards[q])
 					re := regexp.MustCompile(exp)
 					if len(re.FindAllString(hand, -1)) == 4 {
-						r5 = orderHands(r5, x)
+						r5 = orderHands(r5, x, cards)
 						f = true
 						break
 					}
@@ -269,7 +267,7 @@ func (d Day7) Part2() (string, error) {
 						}
 					}
 					if c2 && c3 {
-						r4 = orderHands(r4, x)
+						r4 = orderHands(r4, x, cards)
 						f = true
 					}
 				}
@@ -290,7 +288,7 @@ func (d Day7) Part2() (string, error) {
 							}
 						}
 						if c2 && c3 {
-							r4 = orderHands(r4, x)
+							r4 = orderHands(r4, x, cards)
 							f = true
 						}
 					}
@@ -299,7 +297,7 @@ func (d Day7) Part2() (string, error) {
 						for q := 0; q < len(cards); q++ {
 							re := regexp.MustCompile(cards[q])
 							if len(re.FindAllString(hand, -1)) == 2 {
-								r4 = orderHands(r4, x)
+								r4 = orderHands(r4, x, cards)
 								f = true
 								break
 							}
@@ -314,7 +312,7 @@ func (d Day7) Part2() (string, error) {
 					exp := fmt.Sprintf("[%s*]", cards[q])
 					re := regexp.MustCompile(exp)
 					if len(re.FindAllString(hand, -1)) == 3 {
-						r3 = orderHands(r3, x)
+						r3 = orderHands(r3, x, cards)
 						f = true
 						break
 					}
@@ -332,7 +330,7 @@ func (d Day7) Part2() (string, error) {
 					}
 				}
 				if c == 2 {
-					r2 = orderHands(r2, x)
+					r2 = orderHands(r2, x, cards)
 					f = true
 				}
 			}
@@ -343,7 +341,7 @@ func (d Day7) Part2() (string, error) {
 					exp := fmt.Sprintf("[%s*]", cards[q])
 					re := regexp.MustCompile(exp)
 					if len(re.FindAllString(hand, -1)) == 2 {
-						r1 = orderHands(r1, x)
+						r1 = orderHands(r1, x, cards)
 						f = true
 						break
 					}
@@ -351,7 +349,7 @@ func (d Day7) Part2() (string, error) {
 			}
 
 			if !f {
-				r0 = orderHands(r0, x)
+				r0 = orderHands(r0, x, cards)
 			}
 		}
 	}
