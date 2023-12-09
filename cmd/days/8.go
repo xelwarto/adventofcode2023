@@ -3,7 +3,6 @@ package days
 import (
 	"code/util"
 	"fmt"
-	"math"
 	"regexp"
 	"strings"
 )
@@ -15,17 +14,6 @@ var day8 = Day8(8)
 type Step struct {
 	Left  string
 	Right string
-}
-
-func GCD(a, b int64) int64 {
-	for b != 0 {
-		a, b = b, a%b
-	}
-	return a
-}
-
-func Lcm(a, b int64) int64 {
-	return int64(math.Abs(float64(a*b)) / float64(GCD(a, b)))
 }
 
 func (d Day8) Part1() (string, error) {
@@ -147,7 +135,7 @@ func (d Day8) Part2() (string, error) {
 
 	t := int64(totals[0])
 	for q := 1; q < len(totals); q++ {
-		t = Lcm(totals[q], t)
+		t = util.LCM(totals[q], t)
 	}
 
 	return fmt.Sprintf("%v", t), nil
