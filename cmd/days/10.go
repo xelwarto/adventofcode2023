@@ -4,6 +4,7 @@ import (
 	"code/util"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 )
 
@@ -238,8 +239,19 @@ func (d Day10) Part2() (string, error) {
 		px = hx
 	}
 
+	found := [][]int{}
 	tracker2 := [][]string{}
-	for _, line := range tracker {
+
+	for y, line := range tracker {
+		re := regexp.MustCompile(`[\|J7]\*+[\|FL]`)
+		i := re.FindAllStringIndex(strings.Join(line, ""), -1)
+
+		for _, n := range i {
+			for q := (n[0] + 1); q < (n[1] - 1); q++ {
+				found = append(found, []int{y, q})
+			}
+		}
+
 		if len(tracker2) == 0 {
 			for q := 0; q < len(line); q++ {
 				t := []string{line[q]}
@@ -254,10 +266,12 @@ func (d Day10) Part2() (string, error) {
 		}
 	}
 
-	for _, line := range tracker2 {
-		fmt.Println(line)
+	fmt.Println(found)
 
-	}
+	// for _, line := range tracker2 {
+	// 	fmt.Println(line)
+
+	// }
 
 	return fmt.Sprintf("%v", total), nil
 }
@@ -271,5 +285,4 @@ func init() {
 }
 
 // [\|J7]\*+[\|FL]
-
-// -LJ -F7
+// [\-JL]\*+[\-F7]
