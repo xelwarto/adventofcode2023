@@ -272,39 +272,82 @@ func (d Day10) Part2() (string, error) {
 		}
 	}
 
-	in := false
-	for _, line := range tracker {
-		if line[0] != "0" {
-			in = true
+	py = start[0]
+	px = start[1]
+	sy = py
+	sx = px + 1
+	face := "right"
+	for {
+		pipe := pipes[sy][sx]
+
+		if pipe == "." {
+			log.Fatal("GROUND")
+		}
+
+		if pipe == "S" {
+			break
+		}
+
+		if face == "right" {
+			if (sx + 1) < len(tracker[sy]) {
+				if tracker[sy][sx+1] == "*" {
+					tracker[sy][sx+1] = "#"
+				}
+			}
+
+			if pipe == "J" || pipe == "7" {
+				face = "left"
+			}
+		}
+
+		if face == "left" {
+			if (sx - 1) > 0 {
+				if tracker[sy][sx-1] == "*" {
+					tracker[sy][sx-1] = "#"
+				}
+			}
+
+			if pipe == "F" || pipe == "L" {
+				face = "right"
+			}
+		}
+
+		dir := types[pipe]
+		hy := sy
+		hx := sx
+
+		if pipe == "|" || pipe == "-" {
+			if (sy - dir.North) != py {
+				sy = sy - dir.North
+			} else if (sy + dir.South) != py {
+				sy = sy + dir.South
+			}
+
+			if (sx + dir.East) != px {
+				sx = sx + dir.East
+			} else if (sx - dir.West) != px {
+				sx = sx - dir.West
+			}
 		} else {
-			in = false
+			if (sy - dir.North) != py {
+				sy = sy - dir.North
+			}
+
+			if (sy + dir.South) != py {
+				sy = sy + dir.South
+			}
+
+			if (sx + dir.East) != px {
+				sx = sx + dir.East
+			}
+
+			if (sx - dir.West) != px {
+				sx = sx - dir.West
+			}
 		}
-		for q := 0; q < len(line); q++ {
 
-			if line[q] == "0" {
-				continue
-			}
-
-			if line[q] == "|" && in {
-				in = false
-			} else if line[q] == "|" && !in {
-				in = true
-			}
-
-			if (line[q] == "J" || line[q] == "7") && in {
-				in = false
-			} else if (line[q] == "J" || line[q] == "7") && !in {
-				in = true
-			}
-
-			if line[q] == "-" && !in {
-				in = true
-			}
-
-			// if line[q] == "*" && !in {
-			// 	tracker[y][q] = "0"
-			// }
-		}
+		py = hy
+		px = hx
 	}
 
 	for _, line := range tracker {
