@@ -191,6 +191,7 @@ func (d Day10) Part2() (string, error) {
 	sx := px + 1
 	for {
 		pipe := pipes[sy][sx]
+		tracker[sy][sx] = pipe
 
 		if pipe == "." {
 			log.Fatal("GROUND")
@@ -199,8 +200,6 @@ func (d Day10) Part2() (string, error) {
 		if pipe == "S" {
 			break
 		}
-
-		tracker[sy][sx] = pipe
 
 		dir := types[pipe]
 		hy := sy
@@ -272,88 +271,33 @@ func (d Day10) Part2() (string, error) {
 		}
 	}
 
-	py = start[0]
-	px = start[1]
-	sy = py
-	sx = px + 1
-	face := "right"
-	for {
-		pipe := pipes[sy][sx]
-
-		if pipe == "." {
-			log.Fatal("GROUND")
-		}
-
-		if pipe == "S" {
-			break
-		}
-
-		if face == "right" {
-			if (sx + 1) < len(tracker[sy]) {
-				if tracker[sy][sx+1] == "*" {
-					tracker[sy][sx+1] = "#"
+	for y, line := range tracker {
+		for q := 0; q < len(line); q++ {
+			if line[q] == "*" {
+				sy := y
+				sx := q
+				c := 0
+				for {
+					if (sy+1) >= len(tracker) || (sx+1) >= len(line) {
+						if c%2 != 0 {
+							total++
+						}
+						break
+					}
+					sy = (sy + 1)
+					sx = (sx + 1)
+					// -|FJ
+					if tracker[sy][sx] == "-" || tracker[sy][sx] == "|" || tracker[sy][sx] == "F" || tracker[sy][sx] == "J" {
+						c++
+					}
 				}
 			}
-
-			if pipe == "J" || pipe == "7" {
-				face = "left"
-			}
 		}
-
-		if face == "left" {
-			if (sx - 1) > 0 {
-				if tracker[sy][sx-1] == "*" {
-					tracker[sy][sx-1] = "#"
-				}
-			}
-
-			if pipe == "F" || pipe == "L" {
-				face = "right"
-			}
-		}
-
-		dir := types[pipe]
-		hy := sy
-		hx := sx
-
-		if pipe == "|" || pipe == "-" {
-			if (sy - dir.North) != py {
-				sy = sy - dir.North
-			} else if (sy + dir.South) != py {
-				sy = sy + dir.South
-			}
-
-			if (sx + dir.East) != px {
-				sx = sx + dir.East
-			} else if (sx - dir.West) != px {
-				sx = sx - dir.West
-			}
-		} else {
-			if (sy - dir.North) != py {
-				sy = sy - dir.North
-			}
-
-			if (sy + dir.South) != py {
-				sy = sy + dir.South
-			}
-
-			if (sx + dir.East) != px {
-				sx = sx + dir.East
-			}
-
-			if (sx - dir.West) != px {
-				sx = sx - dir.West
-			}
-		}
-
-		py = hy
-		px = hx
 	}
 
-	for _, line := range tracker {
-		fmt.Println(line)
-		total = total + strings.Count(strings.Join(line, ""), "*")
-	}
+	// for _, line := range tracker {
+	// 	fmt.Println(line)
+	// }
 
 	return fmt.Sprintf("%v", total), nil
 }
