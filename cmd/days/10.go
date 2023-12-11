@@ -4,7 +4,6 @@ import (
 	"code/util"
 	"fmt"
 	"log"
-	"regexp"
 	"strings"
 )
 
@@ -186,12 +185,12 @@ func (d Day10) Part2() (string, error) {
 	py := start[0]
 	px := start[1]
 
+	tracker[py][px] = "F"
+
 	sy := py
 	sx := px + 1
 	for {
 		pipe := pipes[sy][sx]
-		tracker[sy][sx] = pipe
-		// fmt.Println(pipe)
 
 		if pipe == "." {
 			log.Fatal("GROUND")
@@ -200,6 +199,8 @@ func (d Day10) Part2() (string, error) {
 		if pipe == "S" {
 			break
 		}
+
+		tracker[sy][sx] = pipe
 
 		dir := types[pipe]
 		hy := sy
@@ -239,39 +240,77 @@ func (d Day10) Part2() (string, error) {
 		px = hx
 	}
 
-	found := [][]int{}
-	tracker2 := [][]string{}
-
 	for y, line := range tracker {
-		re := regexp.MustCompile(`[\|J7]\*+[\|FL]`)
-		i := re.FindAllStringIndex(strings.Join(line, ""), -1)
-
-		for _, n := range i {
-			for q := (n[0] + 1); q < (n[1] - 1); q++ {
-				found = append(found, []int{y, q})
+		for q := 0; q < len(line); q++ {
+			if line[q] != "*" {
+				break
 			}
-		}
-
-		if len(tracker2) == 0 {
-			for q := 0; q < len(line); q++ {
-				t := []string{line[q]}
-				tracker2 = append(tracker2, t)
-			}
-		} else {
-			for q := 0; q < len(line); q++ {
-				t := tracker2[q]
-				t = append(t, line[q])
-				tracker2[q] = t
-			}
+			tracker[y][q] = "0"
 		}
 	}
 
-	fmt.Println(found)
+	lineL := tracker[len(tracker)-1]
+	for q := 0; q < len(lineL); q++ {
+		if lineL[q] == "*" {
+			tracker[len(tracker)-1][q] = "0"
+		}
+	}
 
-	// for _, line := range tracker2 {
-	// 	fmt.Println(line)
+	lineL = tracker[0]
+	for q := 0; q < len(lineL); q++ {
+		if lineL[q] == "*" {
+			tracker[0][q] = "0"
+		}
+	}
 
-	// }
+	for y, line := range tracker {
+		for q := len(line) - 1; q >= 0; q-- {
+			if line[q] != "*" {
+				break
+			}
+			tracker[y][q] = "0"
+		}
+	}
+
+	in := false
+	for _, line := range tracker {
+		if line[0] != "0" {
+			in = true
+		} else {
+			in = false
+		}
+		for q := 0; q < len(line); q++ {
+
+			if line[q] == "0" {
+				continue
+			}
+
+			if line[q] == "|" && in {
+				in = false
+			} else if line[q] == "|" && !in {
+				in = true
+			}
+
+			if (line[q] == "J" || line[q] == "7") && in {
+				in = false
+			} else if (line[q] == "J" || line[q] == "7") && !in {
+				in = true
+			}
+
+			if line[q] == "-" && !in {
+				in = true
+			}
+
+			// if line[q] == "*" && !in {
+			// 	tracker[y][q] = "0"
+			// }
+		}
+	}
+
+	for _, line := range tracker {
+		fmt.Println(line)
+		total = total + strings.Count(strings.Join(line, ""), "*")
+	}
 
 	return fmt.Sprintf("%v", total), nil
 }
