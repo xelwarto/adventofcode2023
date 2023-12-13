@@ -115,6 +115,71 @@ func (d Day12) Part1() (string, error) {
 
 // ##########################################################################################
 
+func perms2(s []string, b []int, i int) []string {
+
+	res := []string{}
+	res = append(res, strings.Join(s, ""))
+	s[b[i]] = "#"
+
+	if i+1 < len(b) {
+		for q := i + 1; q < len(b); q++ {
+			for _, r := range perms2(s, b, q) {
+				res = append(res, r)
+			}
+		}
+	}
+	fmt.Println(i)
+	fmt.Println(res)
+
+	// s[b[i]] = "."
+	// if i+1 < len(b) {
+	// 	for q := i + 1; q < len(b); q++ {
+	// 		for _, r := range perms2(s, b, q) {
+	// 			res = append(res, r)
+	// 		}
+	// 	}
+	// }
+
+	// s[b[i]] = "."
+	// res = append(res, strings.Join(s, ""))
+
+	// s[b[i]] = "#"
+	// if i < len(b) {
+	// 	res = perms(s, b, i+1)
+
+	// 	// s[b[i]] = "."
+	// 	// res = append(res, strings.Join(s, ""))
+
+	// 	// for q := i + 1; q < len(b); q++ {
+	// 	// 	for _, r := range perms(s, b, q) {
+	// 	// 		res = append(res, r)
+	// 	// 	}
+	// 	// }
+	// }
+
+	// res = append(res, strings.Join(s, ""))
+	return res
+}
+
+// ....###
+// #...###
+// ##..###
+// ###.###
+// #.#.###
+// .#..###
+// .##.###
+// ..#.###
+
+// #...###
+// ##..###
+// ###.###
+// ##..###
+// #...###
+// #.#.###
+// #...###
+// #.#.###
+// #...###
+
 func (d Day12) Part2() (string, error) {
 	s, err := util.File2Array("inputs/day12_part2.txt")
 	if err != nil {
@@ -122,8 +187,8 @@ func (d Day12) Part2() (string, error) {
 	}
 
 	total := 0
-	for y, x := range s {
-		fmt.Println(y + 1)
+	for _, x := range s {
+		// fmt.Println(y + 1)
 		if x != "" {
 			line := strings.Split(x, " ")
 			val := line[1]
@@ -139,25 +204,14 @@ func (d Day12) Part2() (string, error) {
 			for _, i := range b {
 				data[i] = "."
 			}
-			res1 := perms(data, b, 0)
-			fmt.Println(len(res1))
+			res1 := perms2(data, b, 0)
+			// fmt.Println(len(res1))
 
 			c := 0
-			match := []string{}
 			for _, r := range res1 {
 				// fmt.Println(r)
 				if sData(r) == val {
-					f := false
-					for _, m := range match {
-						if r == m {
-							f = true
-						}
-					}
-					if !f {
-						match = append(match, r)
-						c++
-					}
-
+					c++
 				}
 			}
 			total = total + c
