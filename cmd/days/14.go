@@ -44,7 +44,7 @@ func (d Day14) Part1() (string, error) {
 		}
 	}
 
-	for y, _ := range tracker {
+	for y := range tracker {
 		// fmt.Println(t)
 		for q := 0; q < len(tracker[y]); q++ {
 			if tracker[y][q] == "O" {
@@ -180,7 +180,7 @@ func (d Day14) Part2() (string, error) {
 		// fmt.Println()
 	}
 
-	for y, _ := range tracker {
+	for y := range tracker {
 		// fmt.Println(t)
 		for q := 0; q < len(tracker[y]); q++ {
 			if tracker[y][q] == "O" {
