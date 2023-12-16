@@ -18,47 +18,30 @@ type Beam struct {
 	On bool
 }
 
-func (d Day16) Part1() (string, error) {
-	s, err := util.File2Array("inputs/day16_part1.txt")
-	if err != nil {
-		return "", err
-	}
-
+func findTotal(b Beam, grid [][]string) int {
+	c2 := 0
 	total := 0
-	grid := [][]string{}
-	eng := [][]int{}
-	for _, x := range s {
-		if x != "" {
-			data := strings.Split(x, "")
-			grid = append(grid, data)
 
-			i := []int{}
-			for q := 0; q < len(data); q++ {
-				i = append(i, 0)
-			}
-			eng = append(eng, i)
+	eng := [][]int{}
+
+	for _, g := range grid {
+		i := []int{}
+		for q := 0; q < len(g); q++ {
+			i = append(i, 0)
 		}
+		eng = append(eng, i)
 	}
 
 	tracker := []Beam{}
-	b := Beam{
-		Y:  0,
-		X:  -1,
-		DX: 1,
-		DY: 0,
-		On: true,
-	}
 	tracker = append(tracker, b)
 
-	for w := 0; w < 1000; w++ {
+	for w := 0; w < 10000; w++ {
 		end := true
 		for z := range tracker {
 			beam := tracker[z]
 			if beam.On {
 				beam.X = beam.X + (beam.DX)
 				beam.Y = beam.Y + (beam.DY)
-
-				// fmt.Printf("Beam: %v - Y:%v X:%v (%v)\n", z, beam.Y, beam.X, beam.On)
 
 				if beam.X < len(grid[0]) && beam.Y < len(grid) {
 					if beam.X >= 0 && beam.Y >= 0 {
@@ -70,9 +53,6 @@ func (d Day16) Part1() (string, error) {
 							beam.DX = 0
 							beam.DY = 1
 
-							// if (beam.Y - 1) >= 0 {
-							// 	e := eng[beam.Y-1][beam.X]
-							// 	if e == 0 {
 							b := Beam{
 								Y:  beam.Y,
 								X:  beam.X,
@@ -81,17 +61,12 @@ func (d Day16) Part1() (string, error) {
 								On: true,
 							}
 							tracker = append(tracker, b)
-							// 	}
-							// }
 						}
 
 						if g == "-" && beam.DY != 0 {
 							beam.DX = 1
 							beam.DY = 0
 
-							// if (beam.X - 1) >= 0 {
-							// 	e := eng[beam.Y][beam.X-1]
-							// 	if e == 0 {
 							b := Beam{
 								Y:  beam.Y,
 								X:  beam.X,
@@ -100,8 +75,6 @@ func (d Day16) Part1() (string, error) {
 								On: true,
 							}
 							tracker = append(tracker, b)
-							// 	}
-							// }
 						}
 
 						if g == "/" {
@@ -168,7 +141,6 @@ func (d Day16) Part1() (string, error) {
 		}
 
 		if end {
-			fmt.Println("HERE")
 			break
 		}
 
@@ -182,26 +154,47 @@ func (d Day16) Part1() (string, error) {
 		}
 		if c > total {
 			total = c
-			fmt.Println(total)
+			c2 = 0
+		} else {
+			c2++
+		}
+
+		if c2 > 10 {
+			break
+		}
+	}
+	return total
+}
+
+func (d Day16) Part1() (string, error) {
+	s, err := util.File2Array("inputs/day16_part1.txt")
+	if err != nil {
+		return "", err
+	}
+
+	total := 0
+	grid := [][]string{}
+
+	for _, x := range s {
+		if x != "" {
+			data := strings.Split(x, "")
+			grid = append(grid, data)
 		}
 	}
 
-	// for _, g := range grid {
-	// 	fmt.Println(g)
-	// }
-	// fmt.Println()
-
-	// for _, e := range eng {
-	// 	fmt.Println(e)
-	// 	for q := 0; q < len(e); q++ {
-	// 		if e[q] == 1 {
-	// 			total++
-	// 		}
-	// 	}
-	// }
+	b := Beam{
+		Y:  0,
+		X:  -1,
+		DX: 1,
+		DY: 0,
+		On: true,
+	}
+	total = findTotal(b, grid)
 
 	return fmt.Sprintf("%v", total), nil
 }
+
+// #################################################################################################
 
 func (d Day16) Part2() (string, error) {
 	s, err := util.File2Array("inputs/day16_part2.txt")
@@ -210,9 +203,72 @@ func (d Day16) Part2() (string, error) {
 	}
 
 	total := 0
+	grid := [][]string{}
+
 	for _, x := range s {
 		if x != "" {
-			fmt.Println(x)
+			data := strings.Split(x, "")
+			grid = append(grid, data)
+		}
+	}
+
+	for q := 0; q < len(grid[0]); q++ {
+		b := Beam{
+			Y:  -1,
+			X:  q,
+			DX: 0,
+			DY: 1,
+			On: true,
+		}
+		t := findTotal(b, grid)
+
+		if t > total {
+			total = t
+		}
+	}
+
+	for q := 0; q < len(grid[0]); q++ {
+		b := Beam{
+			Y:  len(grid),
+			X:  q,
+			DX: 0,
+			DY: -1,
+			On: true,
+		}
+		t := findTotal(b, grid)
+
+		if t > total {
+			total = t
+		}
+	}
+
+	for q := 0; q < len(grid); q++ {
+		b := Beam{
+			Y:  q,
+			X:  -1,
+			DX: 1,
+			DY: 0,
+			On: true,
+		}
+		t := findTotal(b, grid)
+
+		if t > total {
+			total = t
+		}
+	}
+
+	for q := 0; q < len(grid); q++ {
+		b := Beam{
+			Y:  q,
+			X:  len(grid[0]),
+			DX: -1,
+			DY: 0,
+			On: true,
+		}
+		t := findTotal(b, grid)
+
+		if t > total {
+			total = t
 		}
 	}
 
