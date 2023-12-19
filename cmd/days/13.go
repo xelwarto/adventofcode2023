@@ -382,13 +382,14 @@ func (d Day13) Part2() (string, error) {
 
 		if f {
 			total = total + (100 * (rf + 1))
-			fmt.Printf("H RF Found (%v): %v\n", y+1, rf)
+			// fmt.Printf("H RF Found (%v): %v\n", y+1, rf)
 		}
 
 		// ############################################################################################################
 
 		if !f {
 			rf = -1
+			e := 0
 			m := [][]string{}
 			for _, l := range t {
 				data := strings.Split(l, "")
@@ -396,76 +397,26 @@ func (d Day13) Part2() (string, error) {
 			}
 
 			for q := 0; q < len(m[0]); q++ {
-				d1 := []string{}
-				d2 := []string{}
+				e = 0
 				for z := 0; z < len(m); z++ {
 					if q+1 < len(m[0]) {
-						d1 = append(d1, m[z][q])
-						d2 = append(d2, m[z][q+1])
+						if m[z][q] != m[z][q+1] {
+							e++
+						}
 					}
 				}
-				if strings.Join(d1, "") == strings.Join(d2, "") {
+				if e == 1 {
 					rf = q
 					break
 				}
 			}
 
 			if rf != -1 {
-				e = 0
-				r2 := rf
-				for q := rf; q >= 0; q-- {
-					if (r2 + 1) < len(m[0]) {
-						r2++
-						d1 := []string{}
-						d2 := []string{}
-						for z := 0; z < len(m); z++ {
-							d1 = append(d1, m[z][q])
-							d2 = append(d2, m[z][r2])
-						}
-						// fmt.Println(q)
-						// fmt.Println(r2)
-						// fmt.Println(d1)
-						// fmt.Println(d2)
-						// fmt.Println()
-						if strings.Join(d1, "") != strings.Join(d2, "") {
-							e++
-						}
-					}
-				}
-			}
-
-			if e == 1 {
-				f = true
-			}
-
-			if rf != -1 && !f {
-				sf := rf
-				rf = -1
-				m := [][]string{}
-				for _, l := range t {
-					data := strings.Split(l, "")
-					m = append(m, data)
-				}
-
-				for q := sf + 1; q < len(m[0]); q++ {
-					d1 := []string{}
-					d2 := []string{}
-					for z := 0; z < len(m); z++ {
-						if q+1 < len(m[0]) {
-							d1 = append(d1, m[z][q])
-							d2 = append(d2, m[z][q+1])
-						}
-					}
-					if strings.Join(d1, "") == strings.Join(d2, "") {
-						rf = q
-						break
-					}
-				}
-
-				if rf != -1 {
-					e = 0
-					r2 := rf
-					for q := rf; q >= 0; q-- {
+				if rf == 0 {
+					f = true
+				} else {
+					r2 := rf + 1
+					for q := rf - 1; q >= 0; q-- {
 						if (r2 + 1) < len(m[0]) {
 							r2++
 							d1 := []string{}
@@ -474,46 +425,40 @@ func (d Day13) Part2() (string, error) {
 								d1 = append(d1, m[z][q])
 								d2 = append(d2, m[z][r2])
 							}
-							if strings.Join(d1, "") != strings.Join(d2, "") {
+							if strings.Join(d1, "") == strings.Join(d2, "") {
+								f = true
+							} else {
+								f = false
+								break
+							}
+						} else {
+							f = true
+						}
+					}
+				}
+			}
+
+			if !f {
+				sf := rf
+				rf = -1
+				for q := sf + 1; q < len(m[0]); q++ {
+					e = 0
+					for z := 0; z < len(m); z++ {
+						if q+1 < len(m[0]) {
+							if m[z][q] != m[z][q+1] {
 								e++
 							}
 						}
 					}
-				}
-			}
-
-			if e == 1 {
-				f = true
-			}
-
-			if rf != -1 && !f {
-				sf := rf
-				rf = -1
-				m := [][]string{}
-				for _, l := range t {
-					data := strings.Split(l, "")
-					m = append(m, data)
-				}
-
-				for q := sf + 1; q < len(m[0]); q++ {
-					d1 := []string{}
-					d2 := []string{}
-					for z := 0; z < len(m); z++ {
-						if q+1 < len(m[0]) {
-							d1 = append(d1, m[z][q])
-							d2 = append(d2, m[z][q+1])
-						}
-					}
-					if strings.Join(d1, "") == strings.Join(d2, "") {
+					if e == 1 {
 						rf = q
 						break
 					}
 				}
 
 				if rf != -1 {
-					e = 0
-					r2 := rf
-					for q := rf; q >= 0; q-- {
+					r2 := rf + 1
+					for q := rf - 1; q >= 0; q-- {
 						if (r2 + 1) < len(m[0]) {
 							r2++
 							d1 := []string{}
@@ -522,16 +467,15 @@ func (d Day13) Part2() (string, error) {
 								d1 = append(d1, m[z][q])
 								d2 = append(d2, m[z][r2])
 							}
-							if strings.Join(d1, "") != strings.Join(d2, "") {
-								e++
+							if strings.Join(d1, "") == strings.Join(d2, "") {
+								f = true
+							} else {
+								f = false
+								break
 							}
 						}
 					}
 				}
-			}
-
-			if e == 1 {
-				f = true
 			}
 
 			if !f {
@@ -543,38 +487,161 @@ func (d Day13) Part2() (string, error) {
 				}
 
 				for q := 0; q < len(m[0]); q++ {
-					e = 0
+					d1 := []string{}
+					d2 := []string{}
 					for z := 0; z < len(m); z++ {
 						if q+1 < len(m[0]) {
-							if m[z][q] != m[z][q+1] {
+							d1 = append(d1, m[z][q])
+							d2 = append(d2, m[z][q+1])
+						}
+					}
+					if strings.Join(d1, "") == strings.Join(d2, "") {
+						rf = q
+						break
+					}
+				}
+
+				if rf != -1 {
+					e = 0
+					r2 := rf
+					for q := rf; q >= 0; q-- {
+						if (r2 + 1) < len(m[0]) {
+							r2++
+							d1 := []string{}
+							d2 := []string{}
+							for z := 0; z < len(m); z++ {
+								d1 = append(d1, m[z][q])
+								d2 = append(d2, m[z][r2])
+							}
+							// fmt.Println(q)
+							// fmt.Println(r2)
+							// fmt.Println(d1)
+							// fmt.Println(d2)
+							// fmt.Println()
+							if strings.Join(d1, "") != strings.Join(d2, "") {
 								e++
 							}
 						}
 					}
-					if e == 1 {
+				}
+
+				if e == 1 {
+					f = true
+				}
+			}
+
+			if rf != -1 && !f {
+				sf := rf
+				rf = -1
+				m := [][]string{}
+				for _, l := range t {
+					data := strings.Split(l, "")
+					m = append(m, data)
+				}
+
+				for q := sf + 1; q < len(m[0]); q++ {
+					d1 := []string{}
+					d2 := []string{}
+					for z := 0; z < len(m); z++ {
+						if q+1 < len(m[0]) {
+							d1 = append(d1, m[z][q])
+							d2 = append(d2, m[z][q+1])
+						}
+					}
+					if strings.Join(d1, "") == strings.Join(d2, "") {
 						rf = q
-						f = true
 						break
+					}
+				}
+
+				if rf != -1 {
+					e = 0
+					r2 := rf
+					for q := rf; q >= 0; q-- {
+						if (r2 + 1) < len(m[0]) {
+							r2++
+							d1 := []string{}
+							d2 := []string{}
+							for z := 0; z < len(m); z++ {
+								d1 = append(d1, m[z][q])
+								d2 = append(d2, m[z][r2])
+							}
+							if strings.Join(d1, "") != strings.Join(d2, "") {
+								e++
+							}
+						}
 					}
 				}
 			}
 
+			if e == 1 {
+				f = true
+			}
+
+			if rf != -1 && !f {
+				sf := rf
+				rf = -1
+				m := [][]string{}
+				for _, l := range t {
+					data := strings.Split(l, "")
+					m = append(m, data)
+				}
+
+				for q := sf + 1; q < len(m[0]); q++ {
+					d1 := []string{}
+					d2 := []string{}
+					for z := 0; z < len(m); z++ {
+						if q+1 < len(m[0]) {
+							d1 = append(d1, m[z][q])
+							d2 = append(d2, m[z][q+1])
+						}
+					}
+					if strings.Join(d1, "") == strings.Join(d2, "") {
+						rf = q
+						break
+					}
+				}
+
+				if rf != -1 {
+					e = 0
+					r2 := rf
+					for q := rf; q >= 0; q-- {
+						if (r2 + 1) < len(m[0]) {
+							r2++
+							d1 := []string{}
+							d2 := []string{}
+							for z := 0; z < len(m); z++ {
+								d1 = append(d1, m[z][q])
+								d2 = append(d2, m[z][r2])
+							}
+							if strings.Join(d1, "") != strings.Join(d2, "") {
+								e++
+							}
+						}
+					}
+				}
+			}
+
+			if e == 1 {
+				f = true
+			}
+
 			if f {
 				total = total + (rf + 1)
-				fmt.Printf("V RF Found (%v): %v\n", y+1, rf)
-				for _, l := range t {
-					fmt.Println(l)
-				}
-				fmt.Println()
+				// fmt.Printf("V RF Found (%v): %v\n", y+1, rf)
+				// for _, l := range t {
+				// 	fmt.Println(l)
+				// }
+				// fmt.Println()
 			}
 		}
 
 		if !f {
 			fmt.Printf("RF NOT Found (%v): %v\n", y+1, rf)
-			for _, l := range t {
-				fmt.Println(l)
-			}
-			fmt.Println()
+			// for _, l := range t {
+			// 	fmt.Println(l)
+			// }
+			// fmt.Println()
 		}
 
 	}
