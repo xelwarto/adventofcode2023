@@ -160,6 +160,10 @@ func (d Day17) Part1() (string, error) {
 					t.Y = t.Y + (t.DY)
 					t.Forward++
 
+					if t.X == (len(grid[0])-1) && t.Y == (len(grid)-1) {
+						fmt.Println("HERE")
+					}
+
 					if t.Forward > 3 {
 						t.Finished = true
 					} else {
