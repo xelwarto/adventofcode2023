@@ -3,6 +3,7 @@ package days
 import (
 	"code/util"
 	"fmt"
+	"strings"
 )
 
 type Day21 int
@@ -16,10 +17,23 @@ func (d Day21) Part1() (string, error) {
 	}
 
 	total := 0
-	for _, x := range s {
-		if x != "" {
-			fmt.Println(x)
+	grid := [][]string{}
+	// start := []int{0, 0}
+	for _, l := range s {
+		if l != "" {
+			data := strings.Split(l, "")
+			grid = append(grid, data)
+
+			for x := range data {
+				if data[x] == "S" {
+					// start = []int{y, x}
+				}
+			}
 		}
+	}
+
+	for q := 0; q < 6; q++ {
+
 	}
 
 	return fmt.Sprintf("%v", total), nil
