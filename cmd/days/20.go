@@ -312,7 +312,7 @@ func (d Day20) Part1() (string, error) {
 		}
 	}
 
-	for q := 0; q < 10000; q++ {
+	for q := 0; q < 1000; q++ {
 		mods["broadcaster"].Pulse("low", "button")
 	}
 
